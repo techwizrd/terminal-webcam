@@ -1,4 +1,4 @@
-import cv
+import cv2
 import sys
 import math
 import curses
@@ -14,34 +14,29 @@ signal.signal(signal.SIGINT, signal_handler)
 
 width = int(sys.argv[1]) if len(sys.argv) > 1 else 50
 
-# cv.NamedWindow("camera", 1)
-capture = cv.CaptureFromCAM(0)
-
 palette = [' ', '.', '.', '/', 'c', '(', '@', '#', '8']
 
 while True:
-	# Capture the image
-	img = cv.QueryFrame(capture)
-	
-	# Resize the Image
-	size = cv.GetSize(img)
-	height = size[0] * width / size[1]
+    # Capture the image
+    img = cv2.VideoCapture(0).read()[1]
 
-	thumbnail = cv.CreateImage( ( height, width), img.depth, img.nChannels)
-	cv.Resize(img, thumbnail)
-	img = thumbnail
+    # Resize the Image
+    size = img.shape[:-1]
+    height = size[0] * width / size[1]
+    thumbnail = cv2.resize(img, ( height, width))
+    img = thumbnail
 
-	# Clear screen
+    # Clear screen
 
-	# Print the output
-	for x in xrange(img.height):
-		for y in xrange(img.width):
-			b, g, r = img[x, y]
-			value = 0.1145 * b + g * 0.5866 + r * 0.2989
-			index = int(math.floor( value / (256.0 / (len(palette)))))
-			try:
-				stdscr.move(x,y)
-				stdscr.addch(palette[index])
-			except:
-				pass
-	stdscr.refresh()
+    # Print the output
+    for x in xrange(height-1):
+        for y in xrange(width-1):
+            b, g, r = img[y, x]
+            value = 0.1145 * b + g * 0.5866 + r * 0.2989
+            index = int(math.floor( value / (256.0 / (len(palette)))))
+            try:
+                stdscr.move(x,y)
+                stdscr.addch(palette[index])
+            except:
+                pass
+    stdscr.refresh()

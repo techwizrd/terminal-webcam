@@ -6,14 +6,14 @@ a webcam that can be run on a bare terminal, please maximize your terminals!
 setup
 -----
 
-Tested on Ubuntu 12.04
+Tested on Ubuntu 13.04
 
 	sudo apt-get install python-opencv libncurses5-dev libncurses5 ncurses-term
 
 usage
 -----
 	
-	python capture.py 
+	python capture.py
 	python capture.py WIDTH_IN_CHARS
 
 	# For colored version which may be slower, needs optimizing
